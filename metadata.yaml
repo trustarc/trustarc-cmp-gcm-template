@@ -1,0 +1,5 @@
+homepage: "https://www.trustarc.com"
+documentation: "https://support.trustarc.com"
+versions:
+  - sha: 3d4553cd3bcf72331d31e1e8ecef1a7544d83257
+    changeNotes: Initial release
