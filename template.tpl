@@ -1,4 +1,4 @@
-___TERMS_OF_SERVICE___
+﻿___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
@@ -190,10 +190,10 @@ log("prefCookie: " + data.prefCookie);
 
 
 // no existing consent
-if (!data.prefCookie) {
+if (!data.prefCookie) { 
   log("behaviorCookie: " + data.behaviorCookie);
   // us: grant by default, eu: deny by default
-  if (data.behaviorCookie && data.behaviorCookie.indexOf('us') > -1) {
+  if (data.behaviorCookie && data.behaviorCookie.indexOf('us') > -1) { 
     adStorage = analyticsStorage = adPersonalization = adUserData = functionalityStorage =                 personalizationStorage = securityStorage = true;
   }
 } else { // has existing consent, fetch via mapped
@@ -232,7 +232,7 @@ setDefaultConsentState({
     'ad_personalization': adPersonalization ? ConsentType.GRANTED : ConsentType.DENIED,
     'ad_storage': adStorage ? ConsentType.GRANTED : ConsentType.DENIED,
     'ad_user_data': adUserData ? ConsentType.GRANTED : ConsentType.DENIED,
-    'analytics_storage': analyticsStorage ? ConsentType.GRANTED : ConsentType.DENIED,
+    'analytics_storage': analyticsStorage ? ConsentType.GRANTED : ConsentType.DENIED,  
     'functionality_storage': functionalityStorage ? ConsentType.GRANTED : ConsentType.DENIED,
     'personalization_storage': personalizationStorage ? ConsentType.GRANTED : ConsentType.DENIED,
     'security_storage': securityStorage ? ConsentType.GRANTED : ConsentType.DENIED,
@@ -551,6 +551,6 @@ scenarios: []
 
 ___NOTES___
 
-Created on 12/15/2023, 2:42:25 PM
+Created on 12/18/2023, 4:42:43 PM
 
 
