@@ -1,5 +1,7 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 338e5e1df5187e6c4fe8c2125610a519315ef466
+    changeNotes: add TOS and fix typos
   - sha: 3d4553cd3bcf72331d31e1e8ecef1a7544d83257
     changeNotes: Initial release
