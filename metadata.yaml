@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 8369376a57a51d3cf928716a351b151086f779e8
+    changeNotes: fix race condition, add wait_for_update param, add tooltips
   - sha: a94dd0fff16ea8a2d2d1ea844e3a147671bdd592
     changeNotes: implement updateConsentState callback, added ability to insert CMP using template, added helper functions
   - sha: 338e5e1df5187e6c4fe8c2125610a519315ef466
