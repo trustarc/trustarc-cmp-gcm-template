@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 09a998d99dded38fd1deba3963d4c421136f9efd
+    changeNotes: re-upload latest template
   - sha: 6f619e9293706b7ad9946e06f5d1e0521901af32
     changeNotes: fix typo, code cleanup
   - sha: 8369376a57a51d3cf928716a351b151086f779e8
