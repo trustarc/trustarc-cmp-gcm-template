@@ -546,7 +546,8 @@ if (data.integrateGCM) {
 
   Log("data.fireCustomEvent", data.fireCustomEvent);
 
-  if(data.fireCustomEvent == 'yes'){
+  //Checked checkboxes return a boolean, true, when they are checked and false when they are not.
+  if(data.fireCustomEvent){
     for (const key in consentState){
       if (queryPermission('access_consent', key, 'read')) {
         Log("Key: ", key);
