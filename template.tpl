@@ -479,6 +479,12 @@ const onScriptInjectError = () => { Log("Failed to injected the CCM Script"); da
 
 Log("Data: " + JSON.stringify(data));
 
+gtagSet({
+  'developer_id.dNTIxZG': true,
+  'ads_data_redaction': data.enableAdsRedacted,
+  'url_passthrough': data.enableUrlPassthrough
+});
+
 //Inject CMP Code
 Log("Deploy CMP Script: " + data.deployCmpScript);
 if (queryPermission('inject_script', hostName)){
@@ -501,12 +507,6 @@ if (queryPermission('inject_script', hostName)){
 Log("Integrate with Google Consent Mode: " + data.integrateGCM);
 
 if (data.integrateGCM) {
-    gtagSet({
-        'developer_id.dNTIxZG': true,
-        'ads_data_redaction': data.enableAdsRedacted,
-        'url_passthrough': data.enableUrlPassthrough
-    });
-
     let existingConsent = typeof(data.prefCookie) !== 'undefined';
     const impliedConsentSetting = data.impliedConsentSetting;
 
