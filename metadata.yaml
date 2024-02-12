@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: bde2ca248152e8becd7e0a04cdaf14fde7faa5b5
+    changeNotes: move gtagSet to beginning
   - sha: 09a998d99dded38fd1deba3963d4c421136f9efd
     changeNotes: re-upload latest template
   - sha: 6f619e9293706b7ad9946e06f5d1e0521901af32
