@@ -1,12 +1,4 @@
-﻿___TERMS_OF_SERVICE___
-
-By creating or modifying this file you agree to Google Tag Manager's Community
-Template Gallery Developer Terms of Service available at
-https://developers.google.com/tag-manager/gallery-tos (or such other URL as
-Google may provide), as modified from time to time.
-
-
-___INFO___
+﻿___INFO___
 
 {
   "type": "TAG",
@@ -54,6 +46,11 @@ ___TEMPLATE_PARAMETERS___
                 "paramName": "deployCmpScript",
                 "paramValue": true,
                 "type": "EQUALS"
+              }
+            ],
+            "valueValidators": [
+              {
+                "type": "NON_EMPTY"
               }
             ]
           },
@@ -125,7 +122,8 @@ ___TEMPLATE_PARAMETERS___
                 "type": "EQUALS"
               }
             ],
-            "help": "Code of the locations that should be treated as implied (granted by default); This represents the location code present on the notice_behavior cookie."
+            "help": "Code of the locations that should be treated as implied (granted by default); This represents the location code present on the notice_behavior cookie.",
+            "valueValidators": []
           },
           {
             "type": "GROUP",
@@ -357,7 +355,15 @@ ___TEMPLATE_PARAMETERS___
                     "type": "EQUALS"
                   }
                 ],
-                "help": "If your CMP loads asynchronously, it might not always run before your Google Tags. To handle such situations, specify wait_for_update along with a millisecond value to control how long to wait before data is sent."
+                "help": "If your CMP loads asynchronously, it might not always run before your Google Tags. To handle such situations, specify wait_for_update along with a millisecond value to control how long to wait before data is sent.",
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  },
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ]
               }
             ],
             "enablingConditions": [
@@ -386,12 +392,6 @@ ___TEMPLATE_PARAMETERS___
         "help": "Check this option if you would like to use this template to integrate with Google Consent Mode."
       }
     ]
-  },
-  {
-    "type": "CHECKBOX",
-    "name": "enableDebugging",
-    "checkboxText": "Enable log messages",
-    "simpleValueType": true
   }
 ]
 
@@ -409,6 +409,7 @@ const queryPermission = require('queryPermission');
 const addConsentListener = require('addConsentListener');
 const createQueue = require('createQueue');
 const dataLayerPush = createQueue('dataLayer');
+const copyFromWindow = require('copyFromWindow');
 
 //Consent Mode Status
 const ConsentType = {
@@ -424,32 +425,53 @@ const ProductType = {
 
 //Helper Functions
 const Log = (message, extra) => {
-  if(data.enableDebugging){
-    message = "[TrustArc GTM Template]: " + message;
-    log(message, extra || '');
-  }
+  message = "[TrustArc GTM Template]: " + message;
+  log(message, extra || '');
 };
+const isDefined = (s) => {
+  return typeof(s) !== 'undefined' && s !== null && !s.isEmpty();
+} ;
 
-const getConsentFromKeyId = (id, prefCookie, existingConsent, defaultGranted) => {
-
-    if (!existingConsent) {
-        return convertBooleanToGrantedOrDenied(defaultGranted);
-    }
-
-    return convertBooleanToGrantedOrDenied(id > -1 && prefCookie && prefCookie.indexOf(id) > -1);
+const getConsentFromKeyId = (id, prefCookie, typeName, defaultGranted) => {
+  if (id < 0) {
+    var consentType = convertBooleanToGrantedOrDenied(defaultGranted);
+    Log("No Category Mapping found for " + typeName +". Setting to default: " + consentType +".");
+    return consentType;
+  }
+  return convertBooleanToGrantedOrDenied(id > -1 && prefCookie && prefCookie.indexOf(id) > -1);
 };
 
 const convertBooleanToGrantedOrDenied = (boolean) => boolean ? ConsentType.GRANTED : ConsentType.DENIED;
 
-const getConsentState = (prefCookie, existingConsent, defaultGranted) => ({
-    'ad_personalization': getConsentFromKeyId(data.adPersonalizationId, prefCookie, existingConsent, defaultGranted),
-    'ad_storage': getConsentFromKeyId(data.adStorageId, prefCookie, existingConsent, defaultGranted),
-    'ad_user_data': getConsentFromKeyId(data.adUserDataId, prefCookie, existingConsent, defaultGranted),
-    'analytics_storage': getConsentFromKeyId(data.analyticsStorageId, prefCookie, existingConsent, defaultGranted),
-    'functionality_storage': getConsentFromKeyId(data.functionalityStorageId, prefCookie, existingConsent, defaultGranted),
-    'personalization_storage': getConsentFromKeyId(data.personalizationStorageId, prefCookie, existingConsent, defaultGranted),
-    'security_storage': getConsentFromKeyId(data.securityStorageId, prefCookie, existingConsent, defaultGranted),
-});
+const getConsentState = (prefCookie, isDefault, defaultGranted) => {
+    let adStorage, analyticsStorage, adPersonalization, adUserData, functionalityStorage, personalizationStorage, securityStorage;
+    if (isDefault) {
+      adStorage = analyticsStorage = adPersonalization = adUserData = functionalityStorage = personalizationStorage = securityStorage = convertBooleanToGrantedOrDenied(defaultGranted);
+    } else {
+      adStorage = getConsentFromKeyId(data.adStorageId, prefCookie, "Ad Storage", defaultGranted);
+      analyticsStorage = getConsentFromKeyId(data.analyticsStorageId, prefCookie, "Analytics Storage", defaultGranted);
+      adPersonalization = getConsentFromKeyId(data.adPersonalizationId, "Ad Personalization", defaultGranted);
+      adUserData = getConsentFromKeyId(data.adUserDataId, prefCookie, "Ad User Data", defaultGranted);
+      functionalityStorage = getConsentFromKeyId(data.functionalityStorageId, prefCookie, "Functionality Storage", defaultGranted);
+      personalizationStorage = getConsentFromKeyId(data.personalizationStorageId, prefCookie, "Personalization Storage", defaultGranted);
+      securityStorage = getConsentFromKeyId(data.securityStorageId, prefCookie, "Security Storage", defaultGranted);
+    }
+    return({
+    'ad_personalization':  adPersonalization,
+    'ad_storage': adStorage,
+    'ad_user_data': adUserData,
+    'analytics_storage': analyticsStorage,
+    'functionality_storage': functionalityStorage,
+    'personalization_storage': personalizationStorage,
+    'security_storage': securityStorage
+    });
+};
+
+const hasGtagMapping =  (boolean) => {
+  let gcm = copyFromWindow("truste.eu.bindMap.feat.gcm");
+  Log ("gcm: ",gcm);
+  return gcm != undefined && (gcm.adPersonalization > -1 || gcm.adUserData > -1 || gcm.ads > -1 || gcm.analytics > -1 || gcm.functionality > -1 || gcm.personalization > -1 || gcm.security > -1);
+};
 
 const hostName = 'https://consent.trustarc.com';
 const getCCMProScriptUrl = (cmID, product, additionalParameters) => {
@@ -478,7 +500,6 @@ const onScriptInjectError = () => { Log("Failed to injected the CCM Script"); da
 // ---------------------
 
 Log("Data: " + JSON.stringify(data));
-
 gtagSet({
   'developer_id.dNTIxZG': true,
   'ads_data_redaction': data.enableAdsRedacted,
@@ -487,19 +508,17 @@ gtagSet({
 
 //Inject CMP Code
 Log("Deploy CMP Script: " + data.deployCmpScript);
-if (queryPermission('inject_script', hostName)){
-  Log('permission granted to load JS');
-  if (data.deployCmpScript) {
-
-    const cmID = data.cmpID;
-    const additionalParameters = data.additionalParameters;
-    const product = data.cmpType;
-    const ccmScriptURLs = getCCMScriptUrl(cmID, product, additionalParameters);
-
+if (data.deployCmpScript) {
+  const cmID = data.cmpID;
+  const additionalParameters = data.additionalParameters;
+  const product = data.cmpType;
+  const ccmScriptURLs = getCCMScriptUrl(cmID, product, additionalParameters);
+  if (queryPermission('inject_script', hostName)){
+    Log('permission granted to load JS');
     injectScript(ccmScriptURLs.ccm, onScriptInjectSucess, onScriptInjectError);
+  } else {
+    data.gtmOnFailure();
   }
-} else {
-  data.gtmOnFailure();
 }
 
 
@@ -507,7 +526,7 @@ if (queryPermission('inject_script', hostName)){
 Log("Integrate with Google Consent Mode: " + data.integrateGCM);
 
 if (data.integrateGCM) {
-    let existingConsent = typeof(data.prefCookie) !== 'undefined';
+    let existingConsent = isDefined(data.prefCookie);
     const impliedConsentSetting = data.impliedConsentSetting;
 
     let defaultGranted = data.behaviorCookie && data.behaviorCookie.indexOf(impliedConsentSetting) > -1;
@@ -521,7 +540,7 @@ if (data.integrateGCM) {
 
     if(data.waitForUpdate > 0){
       consentState.wait_for_update = data.waitForUpdate;
-      Log(consentState);
+      Log(JSON.stringify(consentState));
     }
 
     Log("Consent State: " + JSON.stringify(consentState));
@@ -531,22 +550,27 @@ if (data.integrateGCM) {
     Log("Before call in window");
 
     callInWindow('addConsentListenerTA', function (prefCookie, behaviorCookie) {
-
-        existingConsent = typeof(prefCookie) !== 'undefined' && prefCookie !== '';
-        defaultGranted = behaviorCookie && behaviorCookie.indexOf(impliedConsentSetting) > -1;
-
-        const cs = getConsentState(prefCookie, existingConsent, defaultGranted);
-        updateConsentState(cs);
-
         Log("Callback executed!!");
-        Log("Updated consent state: " + JSON.stringify(cs));
-        Log("Updated prefCookie: " + prefCookie);
-        Log("Updated behaviorCookie: " + behaviorCookie);
+        if (hasGtagMapping()) {
+          Log ("gtag mapping found. Skipping template consent update.");
+          return;
+        }
+        if (isDefined(prefCookie)) {
+          var defaultGranted = behaviorCookie && behaviorCookie.indexOf(impliedConsentSetting) > -1;
+          var cs = getConsentState(prefCookie, false, defaultGranted);
+          updateConsentState(cs);
+
+          Log("Updated consent state: " + JSON.stringify(cs));
+          Log("Updated prefCookie: " + prefCookie);
+          Log("Updated behaviorCookie: " + behaviorCookie);
+        } else {
+          Log("Invalid prefCookie: " + prefCookie);
+        }
     });
 
   Log("data.fireCustomEvent", data.fireCustomEvent);
 
-  if(data.fireCustomEvent == 'yes'){
+  if(data.fireCustomEvent){
     for (const key in consentState){
       if (queryPermission('access_consent', key, 'read')) {
         Log("Key: ", key);
@@ -557,6 +581,8 @@ if (data.integrateGCM) {
       }
     }
   }
+} else {
+  Log("Google Consent Mode Integration is Not Enabled");
 }
 // Script End
 // ---------------------
@@ -946,6 +972,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 8,
                     "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "truste.eu.bindMap.feat.gcm"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
                   },
                   {
                     "type": 8,
