@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 3f5ab78acf13909aa0c5d8bdb7ff86d610c30bfb
+    changeNotes: remove logging flag, optimize code, add more logging
   - sha: bde2ca248152e8becd7e0a04cdaf14fde7faa5b5
     changeNotes: move gtagSet to beginning
   - sha: 09a998d99dded38fd1deba3963d4c421136f9efd
