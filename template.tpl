@@ -432,39 +432,26 @@ const isDefined = (s) => {
   return typeof(s) !== 'undefined' && s !== null && !s.isEmpty();
 } ;
 
-const getConsentFromKeyId = (id, prefCookie, typeName, defaultGranted) => {
-  if (id < 0) {
-    var consentType = convertBooleanToGrantedOrDenied(defaultGranted);
-    Log("No Category Mapping found for " + typeName +". Setting to default: " + consentType +".");
-    return consentType;
-  }
-  return convertBooleanToGrantedOrDenied(id > -1 && prefCookie && prefCookie.indexOf(id) > -1);
-};
-
 const convertBooleanToGrantedOrDenied = (boolean) => boolean ? ConsentType.GRANTED : ConsentType.DENIED;
 
+const insertConsentState = (id, consentStates, consentTypeName, isDefault, defaultGranted, prefCookie) => {
+  if (id > -1) {
+    consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(isDefault ? defaultGranted : prefCookie && prefCookie.indexOf(id) > -1);
+    return;
+  }
+   Log("No Category Mapping found for " + consentTypeName +". Skipping.");
+};
+
 const getConsentState = (prefCookie, isDefault, defaultGranted) => {
-    let adStorage, analyticsStorage, adPersonalization, adUserData, functionalityStorage, personalizationStorage, securityStorage;
-    if (isDefault) {
-      adStorage = analyticsStorage = adPersonalization = adUserData = functionalityStorage = personalizationStorage = securityStorage = convertBooleanToGrantedOrDenied(defaultGranted);
-    } else {
-      adStorage = getConsentFromKeyId(data.adStorageId, prefCookie, "Ad Storage", defaultGranted);
-      analyticsStorage = getConsentFromKeyId(data.analyticsStorageId, prefCookie, "Analytics Storage", defaultGranted);
-      adPersonalization = getConsentFromKeyId(data.adPersonalizationId, "Ad Personalization", defaultGranted);
-      adUserData = getConsentFromKeyId(data.adUserDataId, prefCookie, "Ad User Data", defaultGranted);
-      functionalityStorage = getConsentFromKeyId(data.functionalityStorageId, prefCookie, "Functionality Storage", defaultGranted);
-      personalizationStorage = getConsentFromKeyId(data.personalizationStorageId, prefCookie, "Personalization Storage", defaultGranted);
-      securityStorage = getConsentFromKeyId(data.securityStorageId, prefCookie, "Security Storage", defaultGranted);
-    }
-    return({
-    'ad_personalization':  adPersonalization,
-    'ad_storage': adStorage,
-    'ad_user_data': adUserData,
-    'analytics_storage': analyticsStorage,
-    'functionality_storage': functionalityStorage,
-    'personalization_storage': personalizationStorage,
-    'security_storage': securityStorage
-    });
+  var consentStates = {};
+  insertConsentState(data.adPersonalizationId, consentStates, "ad_personalization", isDefault, defaultGranted, prefCookie);
+  insertConsentState(data.adStorageId, consentStates, "ad_storage", isDefault, defaultGranted, prefCookie);
+  insertConsentState(data.adUserDataId, consentStates, "ad_user_data", isDefault, defaultGranted, prefCookie);
+  insertConsentState(data.analyticsStorageId, consentStates, "analytics_storage", isDefault, defaultGranted, prefCookie);
+  insertConsentState(data.functionalityStorageId, consentStates, "functionality_storage", isDefault, defaultGranted, prefCookie);
+  insertConsentState(data.personalizationStorageId, consentStates, "personalization_storage", isDefault, defaultGranted, prefCookie);
+  insertConsentState(data.securityStorageId, consentStates, "security_storage", isDefault, defaultGranted, prefCookie);
+  return consentStates;
 };
 
 const hasGtagMapping =  (boolean) => {
