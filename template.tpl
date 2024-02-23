@@ -141,11 +141,7 @@ ___TEMPLATE_PARAMETERS___
                 "name": "adPersonalizationId",
                 "displayName": "ad_personalization",
                 "simpleValueType": true,
-                "valueValidators": [
-                  {
-                    "type": "NON_NEGATIVE_NUMBER"
-                  }
-                ],
+                "valueValidators": [],
                 "defaultValue": 3,
                 "enablingConditions": [],
                 "help": "Sets consent for personalized advertising."
@@ -155,11 +151,7 @@ ___TEMPLATE_PARAMETERS___
                 "name": "adStorageId",
                 "displayName": "ad_storage",
                 "simpleValueType": true,
-                "valueValidators": [
-                  {
-                    "type": "NON_NEGATIVE_NUMBER"
-                  }
-                ],
+                "valueValidators": [],
                 "defaultValue": 3,
                 "enablingConditions": [
                   {
@@ -175,11 +167,7 @@ ___TEMPLATE_PARAMETERS___
                 "name": "adUserDataId",
                 "displayName": "ad_user_data",
                 "simpleValueType": true,
-                "valueValidators": [
-                  {
-                    "type": "NON_NEGATIVE_NUMBER"
-                  }
-                ],
+                "valueValidators": [],
                 "defaultValue": 3,
                 "enablingConditions": [
                   {
@@ -195,11 +183,7 @@ ___TEMPLATE_PARAMETERS___
                 "name": "analyticsStorageId",
                 "displayName": "analytics_storage",
                 "simpleValueType": true,
-                "valueValidators": [
-                  {
-                    "type": "NON_NEGATIVE_NUMBER"
-                  }
-                ],
+                "valueValidators": [],
                 "defaultValue": 2,
                 "enablingConditions": [
                   {
@@ -215,11 +199,7 @@ ___TEMPLATE_PARAMETERS___
                 "name": "functionalityStorageId",
                 "displayName": "functionality_storage",
                 "simpleValueType": true,
-                "valueValidators": [
-                  {
-                    "type": "NON_NEGATIVE_NUMBER"
-                  }
-                ],
+                "valueValidators": [],
                 "defaultValue": 2,
                 "enablingConditions": [
                   {
@@ -235,11 +215,7 @@ ___TEMPLATE_PARAMETERS___
                 "name": "personalizationStorageId",
                 "displayName": "personalization_storage",
                 "simpleValueType": true,
-                "valueValidators": [
-                  {
-                    "type": "NON_NEGATIVE_NUMBER"
-                  }
-                ],
+                "valueValidators": [],
                 "defaultValue": 3,
                 "enablingConditions": [
                   {
@@ -255,11 +231,7 @@ ___TEMPLATE_PARAMETERS___
                 "name": "securityStorageId",
                 "displayName": "security_storage",
                 "simpleValueType": true,
-                "valueValidators": [
-                  {
-                    "type": "NON_NEGATIVE_NUMBER"
-                  }
-                ],
+                "valueValidators": [],
                 "defaultValue": 1,
                 "enablingConditions": [
                   {
@@ -522,8 +494,9 @@ if (data.integrateGCM) {
     Log("Implied location: " + defaultGranted);
     Log("impliedConsentSetting: " + impliedConsentSetting);
     Log("behaviorCookie: " + data.behaviorCookie);
+    Log("defaultGranted: " + defaultGranted);
 
-    const consentState = getConsentState(data.prefCookie, existingConsent, defaultGranted);
+    const consentState = getConsentState(data.prefCookie, !existingConsent, defaultGranted);
 
     if(data.waitForUpdate > 0){
       consentState.wait_for_update = data.waitForUpdate;
