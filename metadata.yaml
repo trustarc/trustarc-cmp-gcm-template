@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: bc80ac90ed4b690c23ddbe73b7814705ba312ac3
+    changeNotes: fix existingConsent check, allow consent types to be set to blank
   - sha: 080213a77dca39be5f393dea1779d261f7bfc1f9
     changeNotes: skip unmapped consent types
   - sha: 3f5ab78acf13909aa0c5d8bdb7ff86d610c30bfb
