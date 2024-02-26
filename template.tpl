@@ -437,8 +437,8 @@ const Log = (message, extra) => {
   log(message, extra || '');
 };
 const isDefined = (s) => {
-  return typeof(s) !== 'undefined' && s !== null && !s.isEmpty();
-} ;
+  return typeof(s) !== 'undefined' && s !== null && s.length > 0;
+};
 
 const convertBooleanToGrantedOrDenied = (boolean) => boolean ? ConsentType.GRANTED : ConsentType.DENIED;
 
@@ -521,48 +521,47 @@ if (data.deployCmpScript) {
 Log("Integrate with Google Consent Mode: " + data.integrateGCM);
 
 if (data.integrateGCM) {
-    let existingConsent = isDefined(data.prefCookie);
-    const impliedConsentSetting = data.impliedConsentSetting;
+  let existingConsent = isDefined(data.prefCookie);
+  const impliedConsentSetting = data.impliedConsentSetting;
+  let defaultGranted = data.behaviorCookie && data.behaviorCookie.indexOf(impliedConsentSetting) > -1;
 
-    let defaultGranted = data.behaviorCookie && data.behaviorCookie.indexOf(impliedConsentSetting) > -1;
+  Log("Existing consent: " + existingConsent);
+  Log("Implied location: " + defaultGranted);
+  Log("impliedConsentSetting: " + impliedConsentSetting);
+  Log("behaviorCookie: " + data.behaviorCookie);
+  Log("defaultGranted: " + defaultGranted);
 
-    Log("Existing consent: " + existingConsent);
-    Log("Implied location: " + defaultGranted);
-    Log("impliedConsentSetting: " + impliedConsentSetting);
-    Log("behaviorCookie: " + data.behaviorCookie);
-    Log("defaultGranted: " + defaultGranted);
+  const consentState = getConsentState(data.prefCookie, !existingConsent, defaultGranted);
 
-    const consentState = getConsentState(data.prefCookie, !existingConsent, defaultGranted);
+  if(data.waitForUpdate > 0){
+    consentState.wait_for_update = data.waitForUpdate;
+    Log(JSON.stringify(consentState));
+  }
 
-    if(data.waitForUpdate > 0){
-      consentState.wait_for_update = data.waitForUpdate;
-      Log(JSON.stringify(consentState));
+  Log("Consent State: " + JSON.stringify(consentState));
+
+  setDefaultConsentState(consentState);
+
+  Log("Before call in window");
+
+  callInWindow('addConsentListenerTA', function (prefCookie, behaviorCookie) {
+    Log("Callback executed!!");
+    if (hasGtagMapping()) {
+      Log ("gtag mapping found. Skipping template consent update.");
+      return;
     }
+    if (isDefined(prefCookie)) {
+      var defaultGranted = behaviorCookie && behaviorCookie.indexOf(impliedConsentSetting) > -1;
+      var cs = getConsentState(prefCookie, false, defaultGranted);
+      updateConsentState(cs);
 
-    Log("Consent State: " + JSON.stringify(consentState));
-
-    setDefaultConsentState(consentState);
-
-    Log("Before call in window");
-
-    callInWindow('addConsentListenerTA', function (prefCookie, behaviorCookie) {
-        Log("Callback executed!!");
-        if (hasGtagMapping()) {
-          Log ("gtag mapping found. Skipping template consent update.");
-          return;
-        }
-        if (isDefined(prefCookie)) {
-          var defaultGranted = behaviorCookie && behaviorCookie.indexOf(impliedConsentSetting) > -1;
-          var cs = getConsentState(prefCookie, false, defaultGranted);
-          updateConsentState(cs);
-
-          Log("Updated consent state: " + JSON.stringify(cs));
-          Log("Updated prefCookie: " + prefCookie);
-          Log("Updated behaviorCookie: " + behaviorCookie);
-        } else {
-          Log("Invalid prefCookie: " + prefCookie);
-        }
-    });
+      Log("Updated consent state: " + JSON.stringify(cs));
+      Log("Updated prefCookie: " + prefCookie);
+      Log("Updated behaviorCookie: " + behaviorCookie);
+    } else {
+      Log("Invalid prefCookie: " + prefCookie);
+    }
+  });
 
   Log("data.fireCustomEvent", data.fireCustomEvent);
 
