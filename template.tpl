@@ -1,4 +1,12 @@
-﻿___INFO___
+﻿___TERMS_OF_SERVICE___
+
+By creating or modifying this file you agree to Google Tag Manager's Community
+Template Gallery Developer Terms of Service available at
+https://developers.google.com/tag-manager/gallery-tos (or such other URL as
+Google may provide), as modified from time to time.
+
+
+___INFO___
 
 {
   "type": "TAG",
@@ -141,18 +149,25 @@ ___TEMPLATE_PARAMETERS___
                 "name": "adPersonalizationId",
                 "displayName": "ad_personalization",
                 "simpleValueType": true,
-                "valueValidators": [],
-                "defaultValue": 3,
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
                 "enablingConditions": [],
-                "help": "Sets consent for personalized advertising."
+                "help": "Sets consent for personalized advertising.",
+                "canBeEmptyString": true
               },
               {
                 "type": "TEXT",
                 "name": "adStorageId",
                 "displayName": "ad_storage",
                 "simpleValueType": true,
-                "valueValidators": [],
-                "defaultValue": 3,
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
                 "enablingConditions": [
                   {
                     "paramName": "integrateGCM",
@@ -160,15 +175,19 @@ ___TEMPLATE_PARAMETERS___
                     "type": "EQUALS"
                   }
                 ],
-                "help": "Enables storage, such as cookies (web) or device identifiers (apps), related to advertising."
+                "help": "Enables storage, such as cookies (web) or device identifiers (apps), related to advertising.",
+                "canBeEmptyString": true
               },
               {
                 "type": "TEXT",
                 "name": "adUserDataId",
                 "displayName": "ad_user_data",
                 "simpleValueType": true,
-                "valueValidators": [],
-                "defaultValue": 3,
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
                 "enablingConditions": [
                   {
                     "paramName": "integrateGCM",
@@ -176,15 +195,19 @@ ___TEMPLATE_PARAMETERS___
                     "type": "EQUALS"
                   }
                 ],
-                "help": "Sets consent for sending user data to Google for online advertising purposes."
+                "help": "Sets consent for sending user data to Google for online advertising purposes.",
+                "canBeEmptyString": true
               },
               {
                 "type": "TEXT",
                 "name": "analyticsStorageId",
                 "displayName": "analytics_storage",
                 "simpleValueType": true,
-                "valueValidators": [],
-                "defaultValue": 2,
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
                 "enablingConditions": [
                   {
                     "paramName": "integrateGCM",
@@ -192,15 +215,19 @@ ___TEMPLATE_PARAMETERS___
                     "type": "EQUALS"
                   }
                 ],
-                "help": "Enables storage, such as cookies (web) or device identifiers (apps), related to analytics, for example, visit duration."
+                "help": "Enables storage, such as cookies (web) or device identifiers (apps), related to analytics, for example, visit duration.",
+                "canBeEmptyString": true
               },
               {
                 "type": "TEXT",
                 "name": "functionalityStorageId",
                 "displayName": "functionality_storage",
                 "simpleValueType": true,
-                "valueValidators": [],
-                "defaultValue": 2,
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
                 "enablingConditions": [
                   {
                     "paramName": "integrateGCM",
@@ -208,15 +235,19 @@ ___TEMPLATE_PARAMETERS___
                     "type": "EQUALS"
                   }
                 ],
-                "help": "Enables storage that supports the functionality of the website or app, for example, language settings."
+                "help": "Enables storage that supports the functionality of the website or app, for example, language settings.",
+                "canBeEmptyString": true
               },
               {
                 "type": "TEXT",
                 "name": "personalizationStorageId",
                 "displayName": "personalization_storage",
                 "simpleValueType": true,
-                "valueValidators": [],
-                "defaultValue": 3,
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
                 "enablingConditions": [
                   {
                     "paramName": "integrateGCM",
@@ -224,15 +255,19 @@ ___TEMPLATE_PARAMETERS___
                     "type": "EQUALS"
                   }
                 ],
-                "help": "Enables storage related to personalization, for example, video recommendations."
+                "help": "Enables storage related to personalization, for example, video recommendations.",
+                "canBeEmptyString": true
               },
               {
                 "type": "TEXT",
                 "name": "securityStorageId",
                 "displayName": "security_storage",
                 "simpleValueType": true,
-                "valueValidators": [],
-                "defaultValue": 1,
+                "valueValidators": [
+                  {
+                    "type": "NON_NEGATIVE_NUMBER"
+                  }
+                ],
                 "enablingConditions": [
                   {
                     "paramName": "integrateGCM",
@@ -240,7 +275,8 @@ ___TEMPLATE_PARAMETERS___
                     "type": "EQUALS"
                   }
                 ],
-                "help": "Enables storage related to security such as authentication functionality, fraud prevention, and other user protection."
+                "help": "Enables storage related to security such as authentication functionality, fraud prevention, and other user protection.",
+                "canBeEmptyString": true
               }
             ],
             "enablingConditions": [
