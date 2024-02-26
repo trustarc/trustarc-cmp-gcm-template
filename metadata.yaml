@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 40ec16ec761d3096597e2d95e6a8d34b86998ad4
+    changeNotes: re-add ToS, remove consent type default values, allow empty string
   - sha: bc80ac90ed4b690c23ddbe73b7814705ba312ac3
     changeNotes: fix existingConsent check, allow consent types to be set to blank
   - sha: 080213a77dca39be5f393dea1779d261f7bfc1f9
