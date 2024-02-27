@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 4b107753ed7a893435702a74ace607ae561bf016
+    changeNotes: remove consentTypes validation rule
   - sha: ec5dc726e25bb0d8e0d44ab4183058033ce23de1
     changeNotes: fix isDefined, fix formatting
   - sha: 40ec16ec761d3096597e2d95e6a8d34b86998ad4
