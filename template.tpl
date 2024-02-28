@@ -372,6 +372,12 @@ ___TEMPLATE_PARAMETERS___
         "help": "Check this option if you would like to use this template to integrate with Google Consent Mode."
       }
     ]
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "enableLogging",
+    "checkboxText": "Enable Logging",
+    "simpleValueType": true
   }
 ]
 
@@ -405,8 +411,10 @@ const ProductType = {
 
 //Helper Functions
 const Log = (message, extra) => {
-  message = "[TrustArc GTM Template]: " + message;
-  log(message, extra || '');
+  if (data.enableLogging) {
+    message = "[TrustArc GTM Template]: " + message;
+    log(message, extra || '');
+  }
 };
 const isDefined = (s) => {
   return typeof(s) !== 'undefined' && s !== null && s.length > 0;
@@ -573,7 +581,7 @@ ___WEB_PERMISSIONS___
           "key": "environments",
           "value": {
             "type": 1,
-            "string": "debug"
+            "string": "all"
           }
         }
       ]
