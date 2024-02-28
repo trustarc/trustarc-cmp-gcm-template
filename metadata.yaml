@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: e9bef84b48c86f684cc2b50785122e78564622bd
+    changeNotes: re-add enableLogging flag, set permissions to always log
   - sha: 4b107753ed7a893435702a74ace607ae561bf016
     changeNotes: remove consentTypes validation rule
   - sha: ec5dc726e25bb0d8e0d44ab4183058033ce23de1
