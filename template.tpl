@@ -444,8 +444,9 @@ const getConsentState = (prefCookie, isDefault, defaultGranted) => {
 
 const hasGtagMapping =  (boolean) => {
   let gcm = copyFromWindow("truste.eu.bindMap.feat.gcm");
+  let gtag = copyFromWindow("gtag");
   Log ("gcm: ",gcm);
-  return gcm != undefined && (gcm.adPersonalization > -1 || gcm.adUserData > -1 || gcm.ads > -1 || gcm.analytics > -1 || gcm.functionality > -1 || gcm.personalization > -1 || gcm.security > -1);
+  return typeof(gtag) != 'undefined' && gcm != undefined && (gcm.adPersonalization > -1 || gcm.adUserData > -1 || gcm.ads > -1 || gcm.analytics > -1 || gcm.functionality > -1 || gcm.personalization > -1 || gcm.security > -1);
 };
 
 const hostName = 'https://consent.trustarc.com';
@@ -978,6 +979,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 1,
                     "string": "truste.eu.bindMap.feat.gcm"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "gtag"
                   },
                   {
                     "type": 8,
