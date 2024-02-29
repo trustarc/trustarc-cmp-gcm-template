@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 017414279fc5d52ca134f59c048fe168136e43ac
+    changeNotes: add check if gtag function is undefined
   - sha: e9bef84b48c86f684cc2b50785122e78564622bd
     changeNotes: re-add enableLogging flag, set permissions to always log
   - sha: 4b107753ed7a893435702a74ace607ae561bf016
