@@ -130,7 +130,7 @@ ___TEMPLATE_PARAMETERS___
                 "type": "EQUALS"
               }
             ],
-            "help": "Code of the locations that should be treated as implied (granted by default); This represents the location code present on the notice_behavior cookie.",
+            "help": "Code of the locations that should be treated as implied (granted by default); This represents the location code present on the notice_behavior cookie. Multiple values can be separated using a comma ( , ). Include \u0027none\u0027 to add support for unprovisioned countries.",
             "valueValidators": []
           },
           {
@@ -503,12 +503,13 @@ Log("Integrate with Google Consent Mode: " + data.integrateGCM);
 
 if (data.integrateGCM) {
   let existingConsent = isDefined(data.prefCookie);
-  const impliedConsentSetting = data.impliedConsentSetting;
-  let defaultGranted = data.behaviorCookie && data.behaviorCookie.indexOf(impliedConsentSetting) > -1;
+  const impliedConsentSetting = data.impliedConsentSetting.split(',');
+  let defaultGranted = !!(data.behaviorCookie && impliedConsentSetting.some(( ics => data.behaviorCookie.indexOf(ics) > -1)));
 
   Log("Existing consent: " + existingConsent);
   Log("Implied location: " + defaultGranted);
   Log("impliedConsentSetting: " + impliedConsentSetting);
+  Log("Enable unprovisioned: " + data.enableUnprovisioned);
   Log("behaviorCookie: " + data.behaviorCookie);
   Log("defaultGranted: " + defaultGranted);
 
