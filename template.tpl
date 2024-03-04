@@ -423,7 +423,7 @@ const isDefined = (s) => {
 const convertBooleanToGrantedOrDenied = (boolean) => boolean ? ConsentType.GRANTED : ConsentType.DENIED;
 
 const insertConsentState = (id, consentStates, consentTypeName, isDefault, defaultGranted, prefCookie) => {
-  if (id > -1) {
+  if (id != "" && id > -1) {
     consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(isDefault ? defaultGranted : prefCookie && prefCookie.indexOf(id) > -1);
     return;
   }
@@ -468,6 +468,52 @@ const getCCMScriptUrl = (cmID, product, additionalParameters) => {
     return getCCMAdvancedScriptUrl(cmID, product, additionalParameters);
 };
 
+const getDefaultGranted = (behaviorCookie) => {
+  const impliedConsentSetting = data.impliedConsentSetting.split(',');
+  return !!(behaviorCookie && impliedConsentSetting.some(( ics => behaviorCookie.indexOf(ics) > -1)));
+};
+
+const defaultConsent = (behaviorCookie) => {
+  let existingConsent = isDefined(data.prefCookie);
+  if (!hasDefaultConsent && (existingConsent || isDefined(behaviorCookie))) {
+    const impliedConsentSetting = data.impliedConsentSetting.split(',');
+    let defaultGranted = getDefaultGranted(behaviorCookie);
+
+    Log("Existing consent: " + existingConsent);
+    Log("Implied location: " + defaultGranted);
+    Log("impliedConsentSetting: " + impliedConsentSetting);
+    Log("Enable unprovisioned: " + data.enableUnprovisioned);
+    Log("behaviorCookie: " + behaviorCookie);
+    Log("defaultGranted: " + defaultGranted);
+
+    const consentState = getConsentState(data.prefCookie, !existingConsent, defaultGranted);
+
+    if(data.waitForUpdate > 0){
+      consentState.wait_for_update = data.waitForUpdate;
+      Log(JSON.stringify(consentState));
+    }
+
+    Log("Default Consent State: " + JSON.stringify(consentState));
+
+    setDefaultConsentState(consentState);
+    hasDefaultConsent = true;
+
+    Log("data.fireCustomEvent", data.fireCustomEvent);
+
+    if(data.fireCustomEvent){
+      for (const key in consentState){
+        if (queryPermission('access_consent', key, 'read')) {
+          Log("Key: ", key);
+          addConsentListener(key, function(consentType, granted) {
+            Log("consentType: ", consentType);
+            dataLayerPush({'event':  "Consent Changed: " + consentType, 'consent': granted, 'type': consentType});
+          });
+        }
+      }
+    }
+  }
+};
+
 const onScriptInjectSucess = () => { Log("Successfully injected the CCM Script"); data.gtmOnSuccess(); };
 const onScriptInjectError = () => { Log("Failed to injected the CCM Script"); data.gtmOnFailure(); };
 
@@ -481,6 +527,8 @@ gtagSet({
   'ads_data_redaction': data.enableAdsRedacted,
   'url_passthrough': data.enableUrlPassthrough
 });
+
+let hasDefaultConsent = false;
 
 //Inject CMP Code
 Log("Deploy CMP Script: " + data.deployCmpScript);
@@ -497,32 +545,11 @@ if (data.deployCmpScript) {
   }
 }
 
-
 //Integrate GCM
 Log("Integrate with Google Consent Mode: " + data.integrateGCM);
 
 if (data.integrateGCM) {
-  let existingConsent = isDefined(data.prefCookie);
-  const impliedConsentSetting = data.impliedConsentSetting.split(',');
-  let defaultGranted = !!(data.behaviorCookie && impliedConsentSetting.some(( ics => data.behaviorCookie.indexOf(ics) > -1)));
-
-  Log("Existing consent: " + existingConsent);
-  Log("Implied location: " + defaultGranted);
-  Log("impliedConsentSetting: " + impliedConsentSetting);
-  Log("Enable unprovisioned: " + data.enableUnprovisioned);
-  Log("behaviorCookie: " + data.behaviorCookie);
-  Log("defaultGranted: " + defaultGranted);
-
-  const consentState = getConsentState(data.prefCookie, !existingConsent, defaultGranted);
-
-  if(data.waitForUpdate > 0){
-    consentState.wait_for_update = data.waitForUpdate;
-    Log(JSON.stringify(consentState));
-  }
-
-  Log("Consent State: " + JSON.stringify(consentState));
-
-  setDefaultConsentState(consentState);
+  defaultConsent(data.behaviorCookie);
 
   Log("Before call in window");
 
@@ -532,8 +559,10 @@ if (data.integrateGCM) {
       Log ("gtag mapping found. Skipping template consent update.");
       return;
     }
-    if (isDefined(prefCookie)) {
-      var defaultGranted = behaviorCookie && behaviorCookie.indexOf(impliedConsentSetting) > -1;
+    if (!hasDefaultConsent) {
+      defaultConsent(behaviorCookie);
+    } else if (isDefined(prefCookie)) {
+      var defaultGranted = behaviorCookie && defaultGranted(behaviorCookie);
       var cs = getConsentState(prefCookie, false, defaultGranted);
       updateConsentState(cs);
 
@@ -544,25 +573,16 @@ if (data.integrateGCM) {
       Log("Invalid prefCookie: " + prefCookie);
     }
   });
-
-  Log("data.fireCustomEvent", data.fireCustomEvent);
-
-  if(data.fireCustomEvent){
-    for (const key in consentState){
-      if (queryPermission('access_consent', key, 'read')) {
-        Log("Key: ", key);
-        addConsentListener(key, function(consentType, granted) {
-          Log("consentType: ", consentType);
-          dataLayerPush({'event':  "Consent Changed: " + consentType, 'consent': granted, 'type': consentType});
-        });
-      }
-    }
-  }
 } else {
   Log("Google Consent Mode Integration is Not Enabled");
 }
+
+
+
 // Script End
 // ---------------------
+
+
 
 
 // Call data.gtmOnSuccess when the tag is finished.
