@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: c038da82948106fc7d4e06b71e19dcfad6c0e43a
+    changeNotes: fix default consent race condition
   - sha: 63acef97b2600f7bb25d677b57a3b242d819bba6
     changeNotes: add support for multiple implied consent settings
   - sha: 017414279fc5d52ca134f59c048fe168136e43ac
