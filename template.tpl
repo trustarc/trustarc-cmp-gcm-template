@@ -562,7 +562,7 @@ if (data.integrateGCM) {
     if (!hasDefaultConsent) {
       defaultConsent(behaviorCookie);
     } else if (isDefined(prefCookie)) {
-      var defaultGranted = behaviorCookie && defaultGranted(behaviorCookie);
+      var defaultGranted = behaviorCookie && getDefaultGranted(behaviorCookie);
       var cs = getConsentState(prefCookie, false, defaultGranted);
       updateConsentState(cs);
 
