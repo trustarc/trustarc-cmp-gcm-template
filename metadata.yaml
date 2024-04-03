@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: c77ce452ceee9891dddfa5aa1f1f00f74319c205
+    changeNotes: remove implied consent settings default value
   - sha: f8fa00c3dc51715782b0e41e970ffca2ca8c9225
     changeNotes: fix getDefaultGranted call
   - sha: c038da82948106fc7d4e06b71e19dcfad6c0e43a
