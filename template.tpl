@@ -122,7 +122,6 @@ ___TEMPLATE_PARAMETERS___
             "name": "impliedConsentSetting",
             "displayName": "Implied Consent Settings",
             "simpleValueType": true,
-            "defaultValue": "us",
             "enablingConditions": [
               {
                 "paramName": "integrateGCM",
