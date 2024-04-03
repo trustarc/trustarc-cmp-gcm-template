@@ -468,15 +468,15 @@ const getCCMScriptUrl = (cmID, product, additionalParameters) => {
 };
 
 const getDefaultGranted = (behaviorCookie) => {
-  const impliedConsentSetting = data.impliedConsentSetting.split(',');
+  const impliedConsentSetting = isDefined(data.impliedConsentSetting) ? data.impliedConsentSetting.split(',') : [];
   return !!(behaviorCookie && impliedConsentSetting.some(( ics => behaviorCookie.indexOf(ics) > -1)));
 };
 
 const defaultConsent = (behaviorCookie) => {
   let existingConsent = isDefined(data.prefCookie);
-  if (!hasDefaultConsent && (existingConsent || isDefined(behaviorCookie))) {
-    const impliedConsentSetting = data.impliedConsentSetting.split(',');
-    let defaultGranted = getDefaultGranted(behaviorCookie);
+  if (!hasDefaultConsent && (existingConsent || isDefined(data.behaviorCookie))) {
+    const impliedConsentSetting = isDefined(data.impliedConsentSetting) ? data.impliedConsentSetting.split(',') : [];
+    let defaultGranted = getDefaultGranted(data.behaviorCookie);
 
     Log("Existing consent: " + existingConsent);
     Log("Implied location: " + defaultGranted);
