@@ -474,7 +474,7 @@ const getDefaultGranted = (behaviorCookie) => {
 
 const defaultConsent = (behaviorCookie) => {
   let existingConsent = isDefined(data.prefCookie);
-  if (!hasDefaultConsent &&( existingConsent || isDefined(data.behaviorCookie))) {
+  if (!hasDefaultConsent && (existingConsent || isDefined(data.behaviorCookie))) {
     const impliedConsentSetting = isDefined(data.impliedConsentSetting) ? data.impliedConsentSetting.split(',') : [];
     let defaultGranted = getDefaultGranted(data.behaviorCookie);
 
