@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: b28b64cf2064ef4c164a9d8005a6d4e12d00d662
+    changeNotes: fix default consent behaviorCookie check
   - sha: b0a14e7c5b04c4127f85497432b8ad79a0113648
     changeNotes: fix implied consent settings NPE
   - sha: c77ce452ceee9891dddfa5aa1f1f00f74319c205
