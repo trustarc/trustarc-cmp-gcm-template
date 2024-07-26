@@ -448,6 +448,10 @@ const hasGtagMapping =  (boolean) => {
   return typeof(gtag) != 'undefined' && gcm != undefined && (gcm.adPersonalization > -1 || gcm.adUserData > -1 || gcm.ads > -1 || gcm.analytics > -1 || gcm.functionality > -1 || gcm.personalization > -1 || gcm.security > -1);
 };
 
+const hasIabEnabled = () => {
+    callInWindow("truste.eu.hasGcmIabEnabled");
+};
+
 const hostName = 'https://consent.trustarc.com';
 const getCCMProScriptUrl = (cmID, product, additionalParameters) => {
     return {
@@ -473,6 +477,7 @@ const getDefaultGranted = (behaviorCookie) => {
 };
 
 const defaultConsent = (behaviorCookie) => {
+  hasIabEnabled();
   let existingConsent = isDefined(data.prefCookie);
   if (!hasDefaultConsent && (existingConsent || isDefined(behaviorCookie))) {
     const impliedConsentSetting = isDefined(data.impliedConsentSetting) ? data.impliedConsentSetting.split(',') : [];
@@ -571,6 +576,7 @@ if (data.integrateGCM) {
     } else {
       Log("Invalid prefCookie: " + prefCookie);
     }
+    hasIabEnabled();
   });
 } else {
   Log("Google Consent Mode Integration is Not Enabled");
@@ -1050,6 +1056,45 @@ ___WEB_PERMISSIONS___
                   {
                     "type": 8,
                     "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "truste.eu.hasGcmIabEnabled"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
                   }
                 ]
               }
