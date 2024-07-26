@@ -576,7 +576,6 @@ if (data.integrateGCM) {
     } else {
       Log("Invalid prefCookie: " + prefCookie);
     }
-    hasIabEnabled();
   });
 } else {
   Log("Google Consent Mode Integration is Not Enabled");
