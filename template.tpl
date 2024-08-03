@@ -528,17 +528,15 @@ const tagsFiredBeforeDefaultConsentError = () => {
 };
 
 const checkDatalayerForDefaultConsent = () => {
-  var consentFound = false;
-  for(var i = 0; i < dataLayer.length && !consentFound; i++) {
+  for(var i = 0; i < dataLayer.length; i++) {
     Log(JSON.stringify(dataLayer[i]));
     if (dataLayer[i].length > 0) {
       for (var j = 0; j < dataLayer[i].length; j++) {
         if(dataLayer[i][i] == 'consent') {
-          consentFound = true;
-          break;
+          return;
         } else if (dataLayer[i][j] == 'event' || dataLayer[i][j] == 'config') {
           tagsFiredBeforeDefaultConsentError();
-          break;
+          return;
         }
       }
     }
