@@ -395,6 +395,8 @@ const addConsentListener = require('addConsentListener');
 const createQueue = require('createQueue');
 const dataLayerPush = createQueue('dataLayer');
 const copyFromWindow = require('copyFromWindow');
+const dataLayer = copyFromWindow('dataLayer');
+const addEventCallback = require('addEventCallback');
 
 //Consent Mode Status
 const ConsentType = {
@@ -448,6 +450,10 @@ const hasGtagMapping =  (boolean) => {
   return typeof(gtag) != 'undefined' && gcm != undefined && (gcm.adPersonalization > -1 || gcm.adUserData > -1 || gcm.ads > -1 || gcm.analytics > -1 || gcm.functionality > -1 || gcm.personalization > -1 || gcm.security > -1);
 };
 
+const hasIabEnabled = () => {
+    callInWindow("truste.eu.hasGcmIabEnabled");
+};
+
 const hostName = 'https://consent.trustarc.com';
 const getCCMProScriptUrl = (cmID, product, additionalParameters) => {
     return {
@@ -473,6 +479,7 @@ const getDefaultGranted = (behaviorCookie) => {
 };
 
 const defaultConsent = (behaviorCookie) => {
+  hasIabEnabled();
   let existingConsent = isDefined(data.prefCookie);
   if (!hasDefaultConsent && (existingConsent || isDefined(behaviorCookie))) {
     const impliedConsentSetting = isDefined(data.impliedConsentSetting) ? data.impliedConsentSetting.split(',') : [];
@@ -516,6 +523,25 @@ const defaultConsent = (behaviorCookie) => {
 const onScriptInjectSucess = () => { Log("Successfully injected the CCM Script"); data.gtmOnSuccess(); };
 const onScriptInjectError = () => { Log("Failed to injected the CCM Script"); data.gtmOnFailure(); };
 
+const tagsFiredBeforeDefaultConsentError = () => {
+  Log("WARNING: Tags are firing before consent is initialized. Please ensure that the consent mode default is initialized before firing tags.");
+};
+
+const checkDatalayerForDefaultConsent = () => {
+  for(var i = 0; i < dataLayer.length; i++) {
+    Log(JSON.stringify(dataLayer[i]));
+    if (dataLayer[i].length > 0) {
+      for (var j = 0; j < dataLayer[i].length; j++) {
+        if(dataLayer[i][i] == 'consent') {
+          return;
+        } else if (dataLayer[i][j] == 'event' || dataLayer[i][j] == 'config') {
+          tagsFiredBeforeDefaultConsentError();
+          return;
+        }
+      }
+    }
+  }
+};
 
 // Script start
 // ---------------------
@@ -576,11 +602,22 @@ if (data.integrateGCM) {
   Log("Google Consent Mode Integration is Not Enabled");
 }
 
+if (data.enableLogging) { // if logging is enabled, add checking for default consent
+  addEventCallback(function(ctid, eventData){
+    checkDatalayerForDefaultConsent();
+  });
 
 
+  Log(JSON.stringify(dataLayer));
+  if (!hasDefaultConsent) {
+    tagsFiredBeforeDefaultConsentError();
+  } else {
+    checkDatalayerForDefaultConsent();
+  }
+}
+Log("Template Script end");
 // Script End
 // ---------------------
-
 
 
 
@@ -1052,6 +1089,84 @@ ___WEB_PERMISSIONS___
                     "boolean": false
                   }
                 ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "truste.eu.bindMap.feat.iab"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "truste.eu.hasGcmIabEnabled"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
               }
             ]
           }
@@ -1086,6 +1201,16 @@ ___WEB_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "read_event_metadata",
+        "versionId": "1"
+      },
+      "param": []
     },
     "isRequired": true
   }
