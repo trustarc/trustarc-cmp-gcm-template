@@ -604,16 +604,7 @@ if (data.integrateGCM) {
 
 if (data.enableLogging) { // if logging is enabled, add checking for default consent
   addEventCallback(function(ctid, eventData){
-    Log(ctid);
-    Log(JSON.stringify(eventData));
-    if (!hasDefaultConsent && eventData.tags.length) {
-      for(var i = 0; i< eventData.tags.length; i++) {
-        if (eventData.tags[i].status == 'success') {
-          tagsFiredBeforeDefaultConsentError();
-          break;
-        }
-      }
-    }
+    checkDatalayerForDefaultConsent();
   });
 
 
