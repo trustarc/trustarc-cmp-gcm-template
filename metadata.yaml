@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: afdfa3f368aff0eff093209fcf211870cbe67049
+    changeNotes: fix merge conflicts for previous changes
   - sha: 49fb18b64b41db20127884fb3d839d3267d2d987
     changeNotes: add warning if default consent is not set before tags are fired
   - sha: b28b64cf2064ef4c164a9d8005a6d4e12d00d662
