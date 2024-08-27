@@ -352,20 +352,6 @@ ___TEMPLATE_PARAMETERS___
                 "type": "EQUALS"
               }
             ]
-          },
-          {
-            "type": "CHECKBOX",
-            "name": "fireCustomEvent",
-            "checkboxText": "Fire Custom Event when consent changes",
-            "simpleValueType": true,
-            "enablingConditions": [
-              {
-                "paramName": "integrateGCM",
-                "paramValue": true,
-                "type": "EQUALS"
-              }
-            ],
-            "help": "If enabled, TrustArc will fire a custom event every time consent is loaded or changed."
           }
         ],
         "help": "Check this option if you would like to use this template to integrate with Google Consent Mode."
@@ -503,20 +489,6 @@ const defaultConsent = (behaviorCookie) => {
 
     setDefaultConsentState(consentState);
     hasDefaultConsent = true;
-
-    Log("data.fireCustomEvent", data.fireCustomEvent);
-
-    if(data.fireCustomEvent){
-      for (const key in consentState){
-        if (queryPermission('access_consent', key, 'read')) {
-          Log("Key: ", key);
-          addConsentListener(key, function(consentType, granted) {
-            Log("consentType: ", consentType);
-            dataLayerPush({'event':  "Consent Changed: " + consentType, 'consent': granted, 'type': consentType});
-          });
-        }
-      }
-    }
   }
 };
 
@@ -684,7 +656,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   },
                   {
                     "type": 8,
@@ -715,7 +687,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   },
                   {
                     "type": 8,
@@ -746,7 +718,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   },
                   {
                     "type": 8,
@@ -777,7 +749,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   },
                   {
                     "type": 8,
@@ -808,7 +780,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   },
                   {
                     "type": 8,
@@ -839,7 +811,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   },
                   {
                     "type": 8,
@@ -870,7 +842,7 @@ ___WEB_PERMISSIONS___
                   },
                   {
                     "type": 8,
-                    "boolean": true
+                    "boolean": false
                   },
                   {
                     "type": 8,
