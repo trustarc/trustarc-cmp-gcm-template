@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 60b202c9a7fe27676a65c1227fa872599bbbbd42
+    changeNotes: remove consent type read access and fire custom event toggle
   - sha: afdfa3f368aff0eff093209fcf211870cbe67049
     changeNotes: fix merge conflicts for previous changes
   - sha: 49fb18b64b41db20127884fb3d839d3267d2d987
