@@ -461,7 +461,7 @@ const getCCMScriptUrl = (cmID, product, additionalParameters) => {
 
 const getDefaultGranted = (behaviorCookie) => {
   const impliedConsentSetting = isDefined(data.impliedConsentSetting) ? data.impliedConsentSetting.split(',') : [];
-  return !!(behaviorCookie && impliedConsentSetting.some(( ics => behaviorCookie.indexOf(ics) > -1)));
+  return !!(behaviorCookie && impliedConsentSetting.some(( ics => ics && behaviorCookie.indexOf(ics.toLowerCase()) > -1)));
 };
 
 const defaultConsent = (behaviorCookie) => {
