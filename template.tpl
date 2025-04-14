@@ -383,6 +383,7 @@ const dataLayerPush = createQueue('dataLayer');
 const copyFromWindow = require('copyFromWindow');
 const dataLayer = copyFromWindow('dataLayer');
 const addEventCallback = require('addEventCallback');
+const makeInteger = require('makeInteger');
 
 //Consent Mode Status
 const ConsentType = {
@@ -481,7 +482,7 @@ const defaultConsent = (behaviorCookie) => {
     const consentState = getConsentState(data.prefCookie, !existingConsent, defaultGranted);
 
     if(data.waitForUpdate > 0){
-      consentState.wait_for_update = data.waitForUpdate;
+      consentState.wait_for_update = makeInteger(data.waitForUpdate);
       Log(JSON.stringify(consentState));
     }
 
