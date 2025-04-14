@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: d672e9f486dc842cee5f21ecb07b575802922b75
+    changeNotes: cast wait_for_update to Integer
   - sha: 1eb3b6804f267cdd1ad6a4bc129abe92512490d3
     changeNotes: update impliedConsentSetting to be case-insensitive
   - sha: 60b202c9a7fe27676a65c1227fa872599bbbbd42
