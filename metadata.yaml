@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 37105a0e5a14ec597561f0c52b2a42e239d36477
+    changeNotes: update Implied Consent Settings tooltip
   - sha: d672e9f486dc842cee5f21ecb07b575802922b75
     changeNotes: cast wait_for_update to Integer
   - sha: 1eb3b6804f267cdd1ad6a4bc129abe92512490d3
