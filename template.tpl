@@ -129,7 +129,7 @@ ___TEMPLATE_PARAMETERS___
                 "type": "EQUALS"
               }
             ],
-            "help": "Code of the locations that should be treated as implied (granted by default); This represents the location code present on the notice_behavior cookie. Multiple values can be separated using a comma ( , ). Include \u0027none\u0027 to add support for unprovisioned countries.",
+            "help": "Specify the regions that should be treated with an opt-out experience based on consent behavior (granted by default). Multiple values can be separated by commas (e.g., us, eu). Use \u0027none\u0027 for unprovisioned countries. Ensure region codes are aligned with your Cookie Consent Manager Settings. This represents the location code present on the notice_behavior cookie or the new JS variable truste.eu.bindMap.consentModel. When using the \"Consent Model\" for the consent behavior, the recommended value for this field is opt-out.",
             "valueValidators": []
           },
           {
