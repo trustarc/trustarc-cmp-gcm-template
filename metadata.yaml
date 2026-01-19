@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 701091fedbe1d45534fa58bde1d45bb0954c0dac
+    changeNotes: fix checkDatalayerForDefaultConsent loop
   - sha: 37105a0e5a14ec597561f0c52b2a42e239d36477
     changeNotes: update Implied Consent Settings tooltip
   - sha: d672e9f486dc842cee5f21ecb07b575802922b75
