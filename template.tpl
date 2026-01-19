@@ -505,7 +505,7 @@ const checkDatalayerForDefaultConsent = () => {
     Log(JSON.stringify(dataLayer[i]));
     if (dataLayer[i].length > 0) {
       for (var j = 0; j < dataLayer[i].length; j++) {
-        if(dataLayer[i][i] == 'consent') {
+        if(dataLayer[i][j] == 'consent') {
           return;
         } else if (dataLayer[i][j] == 'event' || dataLayer[i][j] == 'config') {
           tagsFiredBeforeDefaultConsentError();
