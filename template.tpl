@@ -420,8 +420,7 @@ const insertConsentState = (id, consentStates, consentTypeName, isDefault, defau
         ? defaultGranted
         : prefCookie?.indexOf(id) > -1;
 
-  consentStates[consentTypeName] =
-  convertBooleanToGrantedOrDenied(granted);
+  consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(granted);
 };
 
 const getConsentState = (prefCookie, isDefault, defaultGranted) => {
