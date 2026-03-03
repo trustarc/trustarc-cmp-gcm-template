@@ -411,9 +411,14 @@ const isDefined = (s) => {
 const convertBooleanToGrantedOrDenied = (boolean) => boolean ? ConsentType.GRANTED : ConsentType.DENIED;
 
 const insertConsentState = (id, consentStates, consentTypeName, isDefault, defaultGranted, prefCookie) => {
-  if (id != "" && id > -1) {
-    consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(isDefault ? defaultGranted : prefCookie && prefCookie.indexOf(id) > -1);
-    return;
+  if (id != "") {
+    if (id == 1) {
+      consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(true);
+      return;
+    } else if (id > -1) {
+      consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(isDefault ? defaultGranted : prefCookie && prefCookie.indexOf(id) > -1);
+      return;
+    }
   }
    Log("No Category Mapping found for " + consentTypeName +". Skipping.");
 };
