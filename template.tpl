@@ -411,16 +411,12 @@ const isDefined = (s) => {
 const convertBooleanToGrantedOrDenied = (boolean) => boolean ? ConsentType.GRANTED : ConsentType.DENIED;
 
 const insertConsentState = (id, consentStates, consentTypeName, isDefault, defaultGranted, prefCookie) => {
-  if (id === "" || id <= -1)
-  Log("No Category Mapping found for " + consentTypeName +". Skipping.");
-  return;
+  if (id === "" || id <= -1) {
+    Log("No Category Mapping found for " + consentTypeName +". Skipping.");
+    return;
+  }
 
-  const granted =
-    id === 1
-      ? true
-      : isDefault
-        ? defaultGranted
-        : prefCookie?.indexOf(id) > -1;
+  const granted = id === 1 ? true : isDefault? defaultGranted : prefCookie && prefCookie.indexOf(id) > -1;
 
   consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(granted);
 };
