@@ -415,9 +415,14 @@ const insertConsentState = (id, consentStates, consentTypeName, isDefault, defau
     Log("No Category Mapping found for " + consentTypeName +". Skipping.");
     return;
   }
-
-  const granted = id === 1 ? true : isDefault? defaultGranted : prefCookie && prefCookie.indexOf(id) > -1;
-
+  var granted;
+  if (id == 1) {
+    granted = true;
+  } else if (isDefault) {
+    granted = defaultGranted;
+  } else {
+    granted = prefCookie && prefCookie.indexOf(id) > -1;
+  }
   consentStates[consentTypeName] = convertBooleanToGrantedOrDenied(granted);
 };
 
