@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: d4a113c0a6b28c4ef173a0ab27973955f02f842e
+    changeNotes: set consent state to GRANTED if mapped to Required
   - sha: 701091fedbe1d45534fa58bde1d45bb0954c0dac
     changeNotes: fix checkDatalayerForDefaultConsent loop
   - sha: 37105a0e5a14ec597561f0c52b2a42e239d36477
