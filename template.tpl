@@ -561,10 +561,10 @@ if (data.integrateGCM) {
 
   callInWindow('addConsentListenerTA', function (prefCookie, behaviorCookie) {
     Log("Callback executed!!");
-    if (hasGtagMapping()) {
-      Log ("gtag mapping found. Skipping template consent update.");
-      return;
-    }
+    // if (hasGtagMapping()) {
+    //  Log ("gtag mapping found. Skipping template consent update.");
+    //  return;
+    // }
     if (!hasDefaultConsent) {
       defaultConsent(behaviorCookie);
     } else if (isDefined(prefCookie)) {
