@@ -1,6 +1,8 @@
 homepage: "https://www.trustarc.com"
 documentation: "https://support.trustarc.com"
 versions:
+  - sha: 022dec3c0c5434aaae52b5c5531937e50687106e
+    changeNotes: add undefined check for insertConsentState
   - sha: d4a113c0a6b28c4ef173a0ab27973955f02f842e
     changeNotes: set consent state to GRANTED if mapped to Required
   - sha: 701091fedbe1d45534fa58bde1d45bb0954c0dac
